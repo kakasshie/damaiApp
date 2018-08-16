@@ -1,113 +1,55 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-  </div>
+    <div>
+       <div>
+           <label>用户名:</label>
+           <input type="text" v-model="username"/>
+       </div>
+        <div>
+            <label>密码;</label>
+            <input type="password" v-model="password"/>
+        </div>
+        <div>
+            <input type="submit" value="提交" @click="submits()"/>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    export default {
+        data(){
+            return {
+                username:"",
+                password:""
+            }
+        },
+        methods:{
+            submits(){
+                let That = this;
+                this.$http.getHelloWorld("/api/user/login",{username:this.username,password:this.password})
+                        .then(function(rel){
+//                            console.log(rel)
+                            if(rel.success == 0){
+//                                this.$route.push()
+//                                alert(rel.msg);
+//                                console.log(rel)
+                                That.$router.push({
+                                    name:"Home",
+                                    path:"home",
+                                    params:{
+                                        user:rel.user
+                                    }
+                                })
+                            }else{
+//                                alert(rel.msg);
+                                console.log(rel.msg);
+                            }
+                        })
+
+            }
+        }
     }
-  }
-}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
